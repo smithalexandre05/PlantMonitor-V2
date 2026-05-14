@@ -38,7 +38,7 @@ void loop() {
     lastSHTReadTime = currentTime;
   }
 
-  if (isInsideLightWindow()) {
+  if (isInsideLightWindow()) { // add an else so it turns off if its on after hours
     if (currentTime - lastLDRReadTime >= LDRReadInterval) {
       if (determineLightState() == true) {
         turnGrowLightON();
