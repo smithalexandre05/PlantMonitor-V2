@@ -47,6 +47,8 @@ void loop() {
       }
       lastLDRReadTime = currentTime;
     }
+  } else {
+    turnGrowLightOFF();
   }
 
   if (waterCooldownOver) {
