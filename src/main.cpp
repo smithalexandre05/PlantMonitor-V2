@@ -8,11 +8,16 @@
 #include "wifi-manager.h"
 #include "time-manager.h"
 
+#include "communication/telemetry.h"
+
 SHTReading currentSHTReading;
 unsigned long lastSHTReadTime = 0;
 unsigned long lastLDRReadTime = 0;
 unsigned long lastWPRunTime = 0;
 unsigned long lastCoolDownTime = 0;
+unsigned long lastDBUpdate = 0;
+
+bool hasSHTReading = false;
 
 void setup() {
 
@@ -35,21 +40,20 @@ void loop() {
 
   if (currentTime - lastSHTReadTime >= SHTReadInterval) {
     currentSHTReading = readSHT40();
+    if (currentSHTReading.SHTValid) {
+      hasSHTReading = true;
+    }
     lastSHTReadTime = currentTime;
   }
 
-  if (isInsideLightWindow()) { // add an else so it turns off if its on after hours
+  if (isInsideLightWindow()) {
     if (currentTime - lastLDRReadTime >= LDRReadInterval) {
       if (determineLightState() == true) {
         turnGrowLightON();
-      } else {
-        turnGrowLightOFF();
-      }
+      } else { turnGrowLightOFF(); }
       lastLDRReadTime = currentTime;
     }
-  } else {
-    turnGrowLightOFF();
-  }
+  } else { turnGrowLightOFF(); }
 
   if (waterCooldownOver) {
     if(determineSoilState() == DRY) {
@@ -67,4 +71,10 @@ void loop() {
   if ((!waterCooldownOver) && (!currentPumpStatus) && (currentTime - lastCoolDownTime >= WPCooldownPeriod)) {
     waterCooldownOver = true;
   }
+
+  if (hasSHTReading) {
+      String wow = buildTelemetryJson(currentSHTReading);
+      Serial.println(wow);
+  }
+
 }

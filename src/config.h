@@ -21,6 +21,8 @@ constexpr const unsigned long CMSReadInterval = 30000;
 // WP
 constexpr const unsigned long WPCooldownPeriod = 1200000;
 constexpr const unsigned long WPRunTime = 1000; // ~80mL
+// DASHBOARD UPDATE
+constexpr const unsigned long TelemetryUpdateInterval = 2000;
 
 // Time Manager
 constexpr int lowerWindowTimeLimit = 8;

@@ -63,7 +63,7 @@ bool isInsideLightWindow() {
     RTCTime windowTime;
     RTC.getTime(windowTime);
     int currentHour = windowTime.getHour();
-    if (currentHour > lowerWindowTimeLimit && currentHour < upperWindowTimeLimit) {
+    if (currentHour >= lowerWindowTimeLimit && currentHour <= upperWindowTimeLimit) {
         return true;
-    }
+    } else { return false; }
 }
